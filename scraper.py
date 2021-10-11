@@ -31,23 +31,37 @@ class DynamicScrapper:
             raise Exception("config file not found!")
 
     def run(self):
-        print(self.url)
-        self.driver.get(self.url)
-        time.sleep(0.2)
-        row = []
-        parents = self.driver.find_elements_by_xpath(self.parent_XPATH)
-        if len(parents) > 0:
-            for parent in parents:
-                for i in range(0, len(self.childs_XPATHS)):
-                    obj = parent.find_element_by_xpath(
-                        self.childs_XPATHS[i]).text
-                    m = {f"{i+1}": obj}
-                    row.append(m)
-            self.convertor_control(row)
+        try:
+            print(self.url)
+            self.driver.get(self.url)
+            time.sleep(0.2)
+            row = []
+            parents = self.driver.find_elements_by_xpath(self.parent_XPATH)
+            if len(parents) > 0:
+                for parent in parents:
+                    for i in range(0, len(self.childs_XPATHS)):
+                        obj = parent.find_element_by_xpath(
+                            self.childs_XPATHS[i]).text
+                        m = {f"{i+1}": obj}
+                        row.append(m)
+                self.compare(self.convertor_check(row))
+                self.convertor_control(row)
+            else:
+                print("no item found!")
+            self.driver.close()
+            self.driver.quit()
+        except not KeyboardInterrupt:
+            self.run()
+
+    def compare(self, row):
+        with open(f"data/{self.country}.json", "r") as f:
+            old_values = json.load(f)
+        print(old_values)
+        print(row)
+        if old_values != row:
+            print(f"New game has been added in {self.country}.")
         else:
-            print("no item found!")
-        self.driver.close()
-        self.driver.quit()
+            print(f"All looks same in {self.country}.")
 
     def child2(self, row):
         r_row = []
@@ -124,12 +138,23 @@ class DynamicScrapper:
             print(row)
             sys.exit(0)
 
+    def convertor_check(self, row):
+        if len(self.childs_XPATHS) == 2:
+            return self.child2(row)
+        elif len(self.childs_XPATHS) == 3:
+            return self.child2(row)
+        elif len(self.childs_XPATHS) == 4:
+            return self.child3(row)
+        else:
+            print("no compatible convertor found!")
+            print(row)
+            sys.exit(0)
+
     def convert_csv(self, row):
         print(row)
         df = pd.DataFrame(row)
         df.to_csv("data2.csv", index=False)
 
     def convert_json(self, row):
-        print(row)
         with open(f"data/{self.country}.json", "w") as f:
             f.write(json.dumps(row))
