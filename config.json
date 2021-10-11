@@ -1,0 +1,36 @@
+{
+    "url": "https://apps.apple.com/developer/supercell/id488106216",
+    "title": "",
+    "parent": "//a[contains(@class,'we-lockup targeted-link l-column small-2 medium-3 large-2')]",
+    "childs": [
+        ".//div[contains(@class,'we-truncate we-truncate--single-line  targeted-link__target')]",
+        ".//div[contains(@class,'we-truncate we-truncate--single-line  we-lockup__subtitle targeted-link__target')]"
+    ],
+    "driver_path": "C:\\Users\\csuon\\Desktop\\gamestore-bot\\drivers\\firefox.exe",
+    "countries": [
+        {
+            "name": "Afghanistan",
+            "code": "AF"
+        },
+        {
+            "name": "Åland Islands",
+            "code": "AX"
+        },
+        {
+            "name": "Albania",
+            "code": "AL"
+        },
+        {
+            "name": "Algeria",
+            "code": "DZ"
+        },
+        {
+            "name": "American Samoa",
+            "code": "AS"
+        },
+        {
+            "name": "AndorrA",
+            "code": "AD"
+        }
+    ]
+}
