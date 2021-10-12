@@ -17,6 +17,7 @@ class DynamicScrapper:
         self.country = country
         self.driver = driver
         self.data = DynamicScrapper.load_config_file(config_path)
+        self.platform = self.data["platform"]
         self.parent_XPATH = self.data["parent"]
         self.childs_XPATHS = self.data["childs"]
         self.driver_path = self.data["driver_path"]
@@ -28,7 +29,7 @@ class DynamicScrapper:
             with open(path, "r") as f:
                 return json.load(f)
         else:
-            raise Exception("config file not found!")
+            raise Exception("Config file not found!")
 
     def run(self):
         try:
@@ -47,21 +48,26 @@ class DynamicScrapper:
                 self.compare(self.reformatter(row))
                 self.convert_json(self.reformatter(row))
             else:
-                print("no item found!")
+                print("No item found!")
+                self.compare(self.reformatter(row))
+                self.convert_json(self.reformatter(row))
             self.driver.close()
             self.driver.quit()
         except Exception as e:
             print(e)
 
     def compare(self, row):
-        with open(f"data/{self.country}.json", "r") as f:
-            old_values = json.load(f)
-        print(old_values)
-        print(row)
-        if old_values != row:
-            print(f"New game has been added in {self.country}.")
+        if os.path.exists(f"_{self.platform}_/data/{self.country}.json"):
+            with open(f"_{self.platform}_/data/{self.country}.json", "r") as f:
+                old_values = json.load(f)
+            print(old_values)
+            print(row)
+            if old_values != row:
+                print(f"New game has been added in {self.country}.")
+            else:
+                print(f"All looks same in {self.country}.")
         else:
-            print(f"All looks same in {self.country}.")
+            print("Found nothing to compare.")
 
     def reformatter(self, row):
         r_row = []
@@ -89,5 +95,5 @@ class DynamicScrapper:
         df.to_csv("data2.csv", index=False)
 
     def convert_json(self, row):
-        with open(f"data/{self.country}.json", "w") as f:
+        with open(f"_{self.platform}_/data/{self.country}.json", "w+") as f:
             json.dump(row, f, ensure_ascii=False)

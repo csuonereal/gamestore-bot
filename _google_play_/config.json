@@ -1,0 +1,39 @@
+{
+    "url": "https://play.google.com/store/apps/developer?id=TikTok+Pte.+Ltd.",
+    "platform": "google_play",
+    "parent": "//div[contains(@class,'ImZGtf mpg5gc')]",
+    "childs": [
+        ".//div[contains(@class,'WsMG1c nnK0zc')]"
+    ],
+    "driver_path": "C:\\Users\\csuon\\Desktop\\gamestore-bot\\drivers\\firefox.exe",
+    "countries": [
+        {
+            "name": "Afghanistan",
+            "code": "AF"
+        },
+        {
+            "name": "Åland Islands",
+            "code": "AX"
+        },
+        {
+            "name": "Albania",
+            "code": "AL"
+        },
+        {
+            "name": "Algeria",
+            "code": "DZ"
+        },
+        {
+            "name": "American Samoa",
+            "code": "AS"
+        },
+        {
+            "name": "AndorrA",
+            "code": "AD"
+        },
+        {
+            "name": "Turkey",
+            "code": "TR"
+        }
+    ]
+}
