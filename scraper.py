@@ -44,14 +44,14 @@ class DynamicScrapper:
                             self.childs_XPATHS[i]).text
                         m = {f"{i+1}": obj}
                         row.append(m)
-                self.compare(self.convertor_check(row))
-                self.convertor_control(row)
+                self.compare(self.reformatter(row))
+                self.convert_json(self.reformatter(row))
             else:
                 print("no item found!")
             self.driver.close()
             self.driver.quit()
-        except not KeyboardInterrupt:
-            self.run()
+        except Exception as e:
+            print(e)
 
     def compare(self, row):
         with open(f"data/{self.country}.json", "r") as f:
@@ -63,92 +63,25 @@ class DynamicScrapper:
         else:
             print(f"All looks same in {self.country}.")
 
-    def child2(self, row):
+    def reformatter(self, row):
         r_row = []
         counter = 1
+        values = []
         for i in row:
-            if counter == 1:
-                first = i[str(counter)]
+            if counter < len(self.childs_XPATHS):
+                values.append(i[str(counter)])
                 counter += 1
-            elif counter == 2:
-                second = i[str(counter)]
+            else:
+                values.append(i[str(counter)])
                 counter = 1
-                m = {
-                    "1": first,
-                    "2": second,
-                }
+                m = {}
+                keys = range(0, len(self.childs_XPATHS))
+                values_ = values
+                for j in keys:
+                    m[str(j+1)] = values_[j]
                 r_row.append(m)
+                values = []
         return r_row
-
-    def child3(self, row):
-        r_row = []
-        counter = 1
-        for i in row:
-            if counter == 1:
-                first = i[str(counter)]
-                counter += 1
-            elif counter == 2:
-                second = i[str(counter)]
-                counter += 1
-            elif counter == 3:
-                third = i[str(counter)]
-                counter = 1
-                m = {
-                    "1": first,
-                    "2": second,
-                    "3": third
-                }
-                r_row.append(m)
-        return r_row
-
-    def child4(self, row):
-        r_row = []
-        counter = 1
-        for i in row:
-            if counter == 1:
-                first = i[str(counter)]
-                counter += 1
-            elif counter == 2:
-                second = i[str(counter)]
-                counter += 1
-            elif counter == 3:
-                third = i[str(counter)]
-                counter += 1
-            elif counter == 4:
-                fourth = i[str(counter)]
-                counter = 1
-                m = {
-                    "1": first,
-                    "2": second,
-                    "3": third,
-                    "4": fourth
-                }
-                r_row.append(m)
-        return r_row
-
-    def convertor_control(self, row):
-        if len(self.childs_XPATHS) == 2:
-            self.convert_json(self.child2(row))
-        elif len(self.childs_XPATHS) == 3:
-            self.convert_json(self.child3(row))
-        elif len(self.childs_XPATHS) == 4:
-            self.convert_json(self.child4(row))
-        else:
-            print("no compatible convertor found!")
-            print(row)
-            sys.exit(0)
-
-    def convertor_check(self, row):
-        if len(self.childs_XPATHS) == 2:
-            return self.child2(row)
-        elif len(self.childs_XPATHS) == 3:
-            return self.child2(row)
-        elif len(self.childs_XPATHS) == 4:
-            return self.child3(row)
-        else:
-            print("no compatible convertor found!")
-            print(row)
-            sys.exit(0)
 
     def convert_csv(self, row):
         print(row)
@@ -157,4 +90,4 @@ class DynamicScrapper:
 
     def convert_json(self, row):
         with open(f"data/{self.country}.json", "w") as f:
-            f.write(json.dumps(row))
+            json.dump(row, f, ensure_ascii=False)
