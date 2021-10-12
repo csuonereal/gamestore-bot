@@ -1,6 +1,6 @@
 {
     "url": "https://apps.apple.com/developer/supercell/id488106216",
-    "title": "",
+    "platform": "app_store",
     "parent": "//a[contains(@class,'we-lockup targeted-link l-column small-2 medium-3 large-2')]",
     "childs": [
         ".//div[contains(@class,'we-truncate we-truncate--single-line  targeted-link__target')]",
